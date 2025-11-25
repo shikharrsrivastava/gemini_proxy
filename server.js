@@ -6,9 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const OPENROUTER_KEY = process.env.OPENROUTER_KEY;
+const OPENROUTER_KEY = process.env.OPENROUTER_KEY;   // ⬅ secure key
 
-// AI Chat Route
 app.post("/chat", async (req, res) => {
   const { system, message } = req.body;
 
@@ -31,19 +30,15 @@ app.post("/chat", async (req, res) => {
     });
 
     const data = await result.json();
-
-    console.log("OPENROUTER RESPONSE:", data);
-
     const reply = data?.choices?.[0]?.message?.content || "No response.";
+
     res.json({ reply });
 
   } catch (err) {
-    console.error("SERVER ERROR:", err);
     res.status(500).json({ error: err.toString() });
   }
 });
 
-// Start Server
-app.listen(3000, () => {
-  console.log("AI Proxy running on port 3000");
-});
+app.listen(3000, () =>
+  console.log("OpenRouter Proxy running!")
+);
